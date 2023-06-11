@@ -1,0 +1,16 @@
+
+The following files have been resolved:
+   none
+
+The following files have NOT been resolved:
+   org.junit.platform:junit-platform-engine:jar:javafx:1.9.2:test
+   org.openjfx:javafx-controls:jar:javafx:20:compile
+   org.junit.platform:junit-platform-commons:jar:javafx:1.9.2:test
+   org.opentest4j:opentest4j:jar:javafx:1.2.0:test
+   org.openjfx:javafx-fxml:jar:javafx:20:compile
+   org.junit.jupiter:junit-jupiter-api:jar:javafx:5.9.2:test
+   org.apiguardian:apiguardian-api:jar:javafx:1.1.2:test
+   org.openjfx:javafx-graphics:jar:javafx:20:compile
+   org.openjfx:javafx-base:jar:javafx:20:compile
+   org.junit.jupiter:junit-jupiter-engine:jar:javafx:5.9.2:test
+
