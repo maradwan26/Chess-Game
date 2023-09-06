@@ -76,7 +76,7 @@ public class Main extends Application {
     private static String blackPawnFile = "src/main/resources/com/example/chessgameproject/images/blackPawn.png";
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws IOException, InterruptedException {
         gridGroup = new Group();
         pieceGroup = new Group();
         highlightGroup = new Group();
@@ -206,17 +206,19 @@ public class Main extends Application {
                 // if turn is white, then white king and vice versa
                 king = turn.equals("white") ? whiteKing: blackKing;
 
-                if (!toMove) {toMove = setPiece(x, y, toMove);}
-
-                else {
-                    for (Location location: curPiece.getMoves()) {
+                if (toMove) {
+                    for (Location location : curPiece.getMoves()) {
                         if (location.getX() == x && location.getY() == y) {
                             // piece is killed; must remove it from board
                             Piece occupiedPiece = p.isOccupied(pieces, new Location(x, y));
-                            if (occupiedPiece != null) {pieces.remove(occupiedPiece);}
+                            if (occupiedPiece != null) {
+                                pieces.remove(occupiedPiece);
+                            }
 
                             String type = curPiece.type;    // for castling evaluation
-                            if (type.equals("rook") || type.equals("king")) {curPiece.hasMoved = true;}
+                            if (type.equals("rook") || type.equals("king")) {
+                                curPiece.hasMoved = true;
+                            }
 
                             // check for castling and enPassant
                             checkCastled(x);
@@ -230,19 +232,22 @@ public class Main extends Application {
                             pieceGroup.getChildren().clear();
                             highlightGroup.getChildren().clear();
                             //switch turns
-                            turn = turn.equals("white") ? "black": "white";
-                            king = turn.equals("white") ? whiteKing: blackKing;
+                            turn = turn.equals("white") ? "black" : "white";
+                            king = turn.equals("white") ? whiteKing : blackKing;
 
                             king.check = king.inCheck(pieces, king);    // check if king is in check
                             checkConditions(pieces, turn); // look for stalements or checkmate
                             flipBoard();
                             try {
                                 drawBoard();
-                            } catch (FileNotFoundException e) {e.printStackTrace(); System.out.println("paths might be wrong !!");}
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                                System.out.println("paths might be wrong !!");
+                            }
                         }
                     }
-                    toMove = setPiece(x, y, toMove);
                 }
+                toMove = setPiece(x, y, toMove);
             }
         });
     }

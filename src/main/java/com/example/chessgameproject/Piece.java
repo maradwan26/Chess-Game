@@ -51,7 +51,7 @@ public class Piece extends Location {
         this.y = y;
     }
 
-    private ArrayList<Location> setMoves(ArrayList<Piece> pieces, Piece piece, Piece king, boolean lookForCheck, boolean flipped) {
+    private ArrayList<Location> setMoves(ArrayList<Piece> pieces, Piece piece) {
         // function also checks if move is possible, but if type = "pawn" then its diagonals must be checked, too
         ArrayList<Location> res = new ArrayList<Location>();
         String otherColour = piece.colour.equals("white") ? "black": "white";
@@ -97,8 +97,8 @@ public class Piece extends Location {
     }
 
 
-    private ArrayList<Location> pawnMoves(ArrayList<Piece> pieces, Piece piece, Piece king, boolean lookForCheck,
-                                          ArrayList<Location> res, String otherColour) {
+    private void pawnMoves(ArrayList<Piece> pieces, Piece piece, Piece king, boolean lookForCheck,
+                           ArrayList<Location> res, String otherColour) {
         // up 1
         Location upOne = new Location(x, y - 1);
         if (y > 0 && isOccupied(pieces, upOne) == null) {
@@ -123,12 +123,11 @@ public class Piece extends Location {
             res = findChecks(res, piece, king, pieces, x, y);
         }
         this.moves = res;
-        return res;
 
     }
 
-    private ArrayList<Location> knightMoves(ArrayList<Piece> pieces, Piece piece, Piece king, boolean lookForCheck,
-                                            ArrayList<Location> res, String otherColour) {
+    private void knightMoves(ArrayList<Piece> pieces, Piece piece, Piece king, boolean lookForCheck,
+                             ArrayList<Location> res, String otherColour) {
         Location location;
         // up 1, left 2
         location = new Location(x - 2, y - 1);
@@ -167,11 +166,10 @@ public class Piece extends Location {
         }
 
         this.moves = res;
-        return res;
     }
 
-    private ArrayList<Location> bishopMoves(ArrayList<Piece> pieces, Piece piece, Piece king,
-                                            boolean lookForCheck, ArrayList<Location> res, String otherColour) {
+    private void bishopMoves(ArrayList<Piece> pieces, Piece piece, Piece king,
+                             boolean lookForCheck, ArrayList<Location> res, String otherColour) {
         boolean upRight, upLeft, downRight, downLeft;
         upRight = upLeft = downRight = downLeft = true;
         Location location;
@@ -209,11 +207,10 @@ public class Piece extends Location {
             res = findChecks(res, piece, king, pieces, x, y);
         }
         this.moves = res;
-        return res;
     }
 
-    private ArrayList<Location> rookMoves(ArrayList<Piece> pieces, Piece piece, Piece king, boolean lookForCheck,
-                                         ArrayList<Location> res, String otherColour) {
+    private void rookMoves(ArrayList<Piece> pieces, Piece piece, Piece king, boolean lookForCheck,
+                           ArrayList<Location> res, String otherColour) {
         Location location;
         boolean up, down, left, right;
         up = down = left = right = true;
@@ -251,19 +248,17 @@ public class Piece extends Location {
             res = findChecks(res, piece, king, pieces, x, y);
         }
         this.moves = res;
-        return res;
     }
 
-    private ArrayList<Location> queenMoves(ArrayList<Piece> pieces, Piece piece, Piece king,
-                                           boolean lookForCheck, ArrayList<Location> res, String otherColour) {
+    private void queenMoves(ArrayList<Piece> pieces, Piece piece, Piece king,
+                            boolean lookForCheck, ArrayList<Location> res, String otherColour) {
         bishopMoves(pieces, piece, king, lookForCheck, res, otherColour);
         rookMoves(pieces, piece, king, lookForCheck, res, otherColour);
         this.moves = res;
-        return res;
     }
 
-    private ArrayList<Location> kingMoves(ArrayList<Piece> pieces, Piece piece, Piece king,
-                                          boolean lookForCheck, ArrayList<Location> res, String otherColour) {
+    private void kingMoves(ArrayList<Piece> pieces, Piece piece, Piece king,
+                           boolean lookForCheck, ArrayList<Location> res, String otherColour) {
         // limit queenMoves to 1 square
         queenMoves(pieces, piece, king, lookForCheck, res, otherColour);
         ArrayList<Location> toRemove = new ArrayList<Location>();
@@ -280,7 +275,6 @@ public class Piece extends Location {
             res = findCastleMoves(pieces, king, res);
         }
         this.moves = res;
-        return res;
     }
 
     private ArrayList<Location> findCastleMoves(ArrayList<Piece> pieces, Piece king, ArrayList<Location> res) {
@@ -398,7 +392,7 @@ public class Piece extends Location {
         String otherColour = king.colour.equals("white") ? "black": "white";
         for (Piece piece: pieces) {
             if (piece.colour.equals(otherColour) && piece.alive) {
-                if (piece.type.equals("pawn")) {piece.setMoves(pieces, piece, null, false, true);}
+                if (piece.type.equals("pawn")) {piece.setMoves(pieces, piece);}
                 else {piece.setMoves(pieces, piece, null, false);}
                 for (Location location: piece.getMoves()) {
                     if (king.x == location.x && king.y == location.y) {return true;}
